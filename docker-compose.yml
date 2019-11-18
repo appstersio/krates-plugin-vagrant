@@ -1,0 +1,5 @@
+version: "3.6"
+services:
+  plugin:
+    build: .
+    command: -c "sleep 10m"

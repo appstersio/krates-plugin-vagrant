@@ -1,0 +1,6 @@
+version: "3.6"
+services:
+  plugin:
+    command: ""
+    volumes:
+      - ".:/src/app"
