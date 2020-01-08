@@ -1,17 +1,17 @@
-# Kontena Vagrant Plugin
+# Krates Vagrant Plugin
 
-This plugin provides support for Vagrant provisioning to Kontena CLI. Easiest way to test full Kontena Platform setup locally.
+This plugin provides support for Vagrant provisioning to Krates. Easiest way to test full Krates Platform setup locally.
 
 ## System Requirements
 
-- [Kontena CLI](https://kontena.io/)
+- [Krates](https://krates.io/)
 - [Vagrant](https://www.vagrantup.com/)
 - [VirtualBox](https://www.virtualbox.org/)
 
 ## Installation
 
 ```
-$ kontena plugin install vagrant
+$ krates plugin install vagrant
 ```
 
 ## Commands
@@ -19,9 +19,9 @@ $ kontena plugin install vagrant
 #### Vagrant Master
 
 ```
-$ kontena vagrant master
+$ krates vagrant master
 Usage:
-    kontena vagrant master [OPTIONS] SUBCOMMAND [ARG] ...
+    krates vagrant master [OPTIONS] SUBCOMMAND [ARG] ...
 
 Parameters:
     SUBCOMMAND                    subcommand
@@ -42,9 +42,9 @@ Options:
 #### Vagrant Node
 
 ```
-$ kontena vagrant node
+$ krates vagrant node
 Usage:
-    kontena vagrant node [OPTIONS] SUBCOMMAND [ARG] ...
+    krates vagrant node [OPTIONS] SUBCOMMAND [ARG] ...
 
 Parameters:
     SUBCOMMAND                    subcommand
@@ -64,12 +64,14 @@ Options:
 
 ## Contributing
 
-1. Fork it ( https://github.com/kontena/kontena-plugin-vagrant )
+1. Fork it ( https://staticpagesio@bitbucket.org/staticpagesio/krates-plugin-vagrant.git )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
 
 ## License
+
+Krates is licensed under the MIT License. See [LICENSE](LICENSE.txt) for full license text.
 
 Kontena is licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE.txt) for full license text.
