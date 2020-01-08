@@ -1,6 +1,6 @@
 #cloud-config
 write_files:
-  - path: /etc/kontena-agent.env
+  - path: /etc/krates-worker.env
     permissions: 0600
     owner: root
     content: |
@@ -8,7 +8,7 @@ write_files:
       KONTENA_TOKEN=<%= grid_token %>
       KONTENA_PEER_INTERFACE=eth1
       KONTENA_VERSION=<%= version %>
-  - path: /etc/systemd/system/docker.service.d/50-kontena.conf
+  - path: /etc/systemd/system/docker.service.d/50-krates.conf
     content: |
         [Service]
         Environment='DOCKER_OPTS=--insecure-registry="10.81.0.0/16" --bip="172.17.43.1/16" -s overlay2'
@@ -62,16 +62,16 @@ coreos:
         [DHCP]
         UseMTU=true
         UseDomains=true
-    - name: kontena-agent.service
+    - name: krates-worker.service
       command: start
       enable: true
       content: |
         [Unit]
-        Description=kontena-agent
+        Description=krates-worker
         After=network-online.target
         After=docker.service
-        Description=Kontena Agent
-        Documentation=http://www.kontena.io/
+        Description=Krates Worker
+        Documentation=http://krates.appsters.io
         Requires=network-online.target
         Requires=docker.service
 
@@ -79,14 +79,14 @@ coreos:
         Restart=always
         RestartSec=5
         TimeoutStartSec=0
-        EnvironmentFile=/etc/kontena-agent.env
-        ExecStartPre=-/usr/bin/docker stop kontena-agent
-        ExecStartPre=-/usr/bin/docker rm kontena-agent
-        ExecStartPre=/usr/bin/docker pull kontena/agent:${KONTENA_VERSION}
-        ExecStart=/usr/bin/docker run --name kontena-agent \
-            --env-file /etc/kontena-agent.env \
+        EnvironmentFile=/etc/krates-worker.env
+        ExecStartPre=-/usr/bin/docker stop krates-worker
+        ExecStartPre=-/usr/bin/docker rm krates-worker
+        ExecStartPre=/usr/bin/docker pull krates/worker
+        ExecStart=/usr/bin/docker run --name krates-worker \
+            --env-file /etc/krates-worker.env \
             -v=/var/run/docker.sock:/var/run/docker.sock \
-            -v=/etc/kontena-agent.env:/etc/kontena.env \
+            -v=/etc/krates-worker.env:/etc/kontena.env \
             --net=host \
-            kontena/agent:${KONTENA_VERSION}
-        ExecStop=/usr/bin/docker stop kontena-agent
+            krates/worker
+        ExecStop=/usr/bin/docker stop krates-worker
