@@ -25,10 +25,10 @@ module Kontena
           vault_iv = opts[:vault_iv]
           initial_admin_code = opts[:initial_admin_code]
           coreos_channel = opts[:coreos_channel]
-          vagrant_path = "#{Dir.home}/.kontena/vagrant_master/"
+          vagrant_path = "#{Dir.home}/.krates/vagrant_master/"
           if Dir.exist?(vagrant_path)
-            puts "Oops... cannot create Kontena Master because installation path already exists."
-            puts "If you are sure that no Kontena Masters exist on this machine, remove folder: #{vagrant_path}"
+            puts "Oops... cannot create Krates Master because installation path already exists."
+            puts "If you are sure that no Krates Master(s) exist on this machine, remove folder: #{vagrant_path}"
             abort
           end
           FileUtils.mkdir_p(vagrant_path)
@@ -37,7 +37,7 @@ module Kontena
           cloudinit_template = File.join(__dir__ , '/cloudinit.yml')
           vars = {
             name: name,
-            server_name: name.sub('kontena-master-', ''),
+            server_name: name.sub('krates-master-', ''),
             version: version,
             memory: memory,
             vault_secret: vault_secret,
@@ -70,10 +70,10 @@ module Kontena
             master_version = JSON.parse(client.get(path: '/'))["version"] rescue nil
           end
 
-          spinner "Kontena Master #{master_version} is now running at #{API_URL}"
+          spinner "Krates Master #{master_version} is now running at #{API_URL}"
 
           {
-            name: name.sub('kontena-master-', ''),
+            name: name.sub('krates-master-', ''),
             public_ip: API_URL.split('//').last,
             provider: 'vagrant',
             version: master_version,
@@ -88,7 +88,7 @@ module Kontena
         end
 
         def generate_name
-          "kontena-master-#{super}-#{rand(1..99)}"
+          "krates-master-#{super}-#{rand(1..99)}"
         end
       end
     end

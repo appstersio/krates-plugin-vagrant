@@ -5,10 +5,10 @@ module Kontena::Plugin::Vagrant::Master
     def execute
       require_relative '../../../machine/vagrant'
 
-      vagrant_path = "#{Dir.home}/.kontena/vagrant_master"
-      abort("Cannot find Vagrant node kontena-master".colorize(:red)) unless Dir.exist?(vagrant_path)
+      vagrant_path = "#{Dir.home}/.krates/vagrant_master"
+      abort("Cannot find Vagrant node krates-master".colorize(:red)) unless Dir.exist?(vagrant_path)
       Dir.chdir(vagrant_path) do
-        spinner "Triggering 'vagrant up' for kontena-master"
+        spinner "Triggering 'vagrant up' for krates-master"
         exit $?.exitstatus unless system('vagrant up')
       end
     end

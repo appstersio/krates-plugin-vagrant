@@ -8,8 +8,8 @@ module Kontena::Plugin::Vagrant::Master
       require 'shellwords'
       require_relative '../../../machine/vagrant'
 
-      vagrant_path = "#{Dir.home}/.kontena/vagrant_master"
-      abort("Cannot find Vagrant kontena-master".colorize(:red)) unless Dir.exist?(vagrant_path)
+      vagrant_path = "#{Dir.home}/.krates/vagrant_master"
+      abort("Cannot find Vagrant krates-master".colorize(:red)) unless Dir.exist?(vagrant_path)
 
       cmd = "vagrant ssh"
       if self.commands_list && !self.commands_list.empty?

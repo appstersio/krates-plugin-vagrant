@@ -7,27 +7,27 @@ VAGRANTFILE_API_VERSION = "2"
 cloud_init = <<INIT
 #cloud-config
 write_files:
-  - path: /etc/kontena-server.env
+  - path: /etc/krates-server.env
     permissions: 0600
     owner: root
     content: |
       KONTENA_VERSION=<%= version %>
-      KONTENA_VAULT_KEY=<%= vault_secret %>
-      KONTENA_VAULT_IV=<%= vault_iv %>
+      KRATES_VAULT_KEY=<%= vault_secret %>
+      KRATES_VAULT_IV=<%= vault_iv %>
 coreos:
   update:
       reboot-strategy: off
   units:
-    - name: kontena-server-mongo.service
+    - name: krates-server-mongo.service
       command: start
       enable: true
       content: |
         [Unit]
-        Description=kontena-server-mongo
+        Description=krates-server-mongo
         After=network-online.target
         After=docker.service
-        Description=Kontena Server MongoDB
-        Documentation=http://www.mongodb.org/
+        Description=Krates Server MongoDB
+        Documentation=https://github.com/appsters/krates
         Requires=network-online.target
         Requires=docker.service
 
@@ -36,52 +36,52 @@ coreos:
         RestartSec=5
         TimeoutStartSec=0
         ExecStartPre=/usr/bin/docker pull mongo:3.2
-        ExecStartPre=-/usr/bin/docker network create kontena
-        ExecStartPre=-/usr/bin/docker volume create kontena-server-mongo
-        ExecStartPre=-/usr/bin/docker stop kontena-server-mongo
-        ExecStartPre=-/usr/bin/docker rm kontena-server-mongo
-        ExecStart=/usr/bin/docker run --name=kontena-server-mongo \
-            -v kontena-server-mongo:/data/db \
-            --network kontena \
+        ExecStartPre=-/usr/bin/docker network create krates
+        ExecStartPre=-/usr/bin/docker volume create krates-server-mongo
+        ExecStartPre=-/usr/bin/docker stop krates-server-mongo
+        ExecStartPre=-/usr/bin/docker rm krates-server-mongo
+        ExecStart=/usr/bin/docker run --name=krates-server-mongo \
+            -v krates-server-mongo:/data/db \
+            --network krates \
             mongo:3.2
-        ExecStop=/usr/bin/docker stop kontena-server-mongo
+        ExecStop=/usr/bin/docker stop krates-server-mongo
 
-    - name: kontena-server-api.service
+    - name: krates-server-api.service
       command: start
       enable: true
       content: |
         [Unit]
-        Description=kontena-server-api
+        Description=krates-server-api
         After=network-online.target
         After=docker.service
-        After=kontena-server-mongo.service
-        Description=Kontena Master
-        Documentation=http://www.kontena.io/
+        After=krates-server-mongo.service
+        Description=Krates Master
+        Documentation=https://github.io/appsters/krates/
         Requires=network-online.target
         Requires=docker.service
-        Requires=kontena-server-mongo.service
+        Requires=krates-server-mongo.service
 
         [Service]
         Restart=always
         RestartSec=5
         TimeoutStartSec=0
-        EnvironmentFile=/etc/kontena-server.env
-        ExecStartPre=-/usr/bin/docker stop kontena-server-api
-        ExecStartPre=-/usr/bin/docker rm kontena-server-api
-        ExecStartPre=-/usr/bin/docker network create kontena
-        ExecStartPre=/usr/bin/docker pull kontena/server:${KONTENA_VERSION}
-        ExecStart=/usr/bin/docker run --name kontena-server-api \
-            -e MONGODB_URI=mongodb://kontena-server-mongo:27017/kontena_server \
-            -e VAULT_KEY=${KONTENA_VAULT_KEY} -e VAULT_IV=${KONTENA_VAULT_IV} \
+        EnvironmentFile=/etc/krates-server.env
+        ExecStartPre=-/usr/bin/docker stop krates-server-api
+        ExecStartPre=-/usr/bin/docker rm krates-server-api
+        ExecStartPre=-/usr/bin/docker network create krates
+        ExecStartPre=/usr/bin/docker pull krates/master:${KONTENA_VERSION}
+        ExecStart=/usr/bin/docker run --name krates-server-api \
+            -e MONGODB_URI=mongodb://krates-server-mongo:27017/krates_server \
+            -e VAULT_KEY=${KRATES_VAULT_KEY} -e VAULT_IV=${KRATES_VAULT_IV} \
             <% if server_name %>-e SERVER_NAME=<%= server_name %><% end %> \
             <% if initial_admin_code %>-e INITIAL_ADMIN_CODE=<%= initial_admin_code %><% end %> \
-            --network kontena \
+            --network krates \
             -p 8080:9292 \
-            kontena/server:${KONTENA_VERSION}
-        ExecStop=/usr/bin/docker stop kontena-server-api
+            krates/master:${KONTENA_VERSION}
+        ExecStop=/usr/bin/docker stop krates-server-api
 INIT
 
-cloud_init_file = Tempfile.new('kontena-master')
+cloud_init_file = Tempfile.new('krates-master')
 File.write(cloud_init_file.path, cloud_init)
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|

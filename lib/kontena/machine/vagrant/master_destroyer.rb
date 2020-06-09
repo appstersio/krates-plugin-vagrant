@@ -8,9 +8,9 @@ module Kontena
         include Kontena::Cli::ShellSpinner
 
         def run!
-          vagrant_path = "#{Dir.home}/.kontena/vagrant_master"
+          vagrant_path = "#{Dir.home}/.krates/vagrant_master"
           Dir.chdir(vagrant_path) do
-            spinner "Triggering termination of Kontena Master from Vagrant"
+            spinner "Triggering termination of Krates Master from Vagrant"
             run_command('vagrant destroy -f')
             FileUtils.remove_entry_secure(vagrant_path)
           end
