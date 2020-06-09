@@ -1,7 +1,7 @@
 # README: http://makefiletutorial.com
 TARGET_PATH   = /src/app
 VOLUME_PATH   = $(shell pwd):$(TARGET_PATH)
-RUBY_IMAGE    = krates/toolbox:2.4.9-6
+RUBY_IMAGE    = krates/toolbox:2.6.5-3
 
 # Adding PHONY to a target will prevent make from confusing the phony target with a file name.
 # In this case, if `test` folder exists, `make test` will still be run.
