@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
   # NOTE: Exclude files not relevant to the plugin
   spec.files        -= %w[ Makefile .dockerignore ]
 
-  spec.add_runtime_dependency 'krates', '~> 1.6.0'
+  spec.add_runtime_dependency 'krates', '~> 1'
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake", "~> 10.0"
 end
