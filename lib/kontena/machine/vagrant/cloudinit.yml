@@ -7,7 +7,6 @@ write_files:
       KONTENA_URI=<%= master_uri %>
       KONTENA_TOKEN=<%= grid_token %>
       KONTENA_PEER_INTERFACE=eth1
-      KONTENA_VERSION=<%= version %>
   - path: /etc/systemd/system/docker.service.d/50-krates.conf
     content: |
         [Service]
@@ -82,11 +81,11 @@ coreos:
         EnvironmentFile=/etc/krates-worker.env
         ExecStartPre=-/usr/bin/docker stop krates-worker
         ExecStartPre=-/usr/bin/docker rm krates-worker
-        ExecStartPre=/usr/bin/docker pull krates/worker
+        ExecStartPre=/usr/bin/docker pull quay.io/krates/worker
         ExecStart=/usr/bin/docker run --name krates-worker \
             --env-file /etc/krates-worker.env \
             -v=/var/run/docker.sock:/var/run/docker.sock \
             -v=/etc/krates-worker.env:/etc/kontena.env \
             --net=host \
-            krates/worker
+            quay.io/krates/worker
         ExecStop=/usr/bin/docker stop krates-worker
