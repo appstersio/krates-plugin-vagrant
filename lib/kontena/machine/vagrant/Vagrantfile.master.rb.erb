@@ -11,7 +11,6 @@ write_files:
     permissions: 0600
     owner: root
     content: |
-      KONTENA_VERSION=<%= version %>
       KRATES_VAULT_KEY=<%= vault_secret %>
       KRATES_VAULT_IV=<%= vault_iv %>
 coreos:
@@ -69,7 +68,7 @@ coreos:
         ExecStartPre=-/usr/bin/docker stop krates-server-api
         ExecStartPre=-/usr/bin/docker rm krates-server-api
         ExecStartPre=-/usr/bin/docker network create krates
-        ExecStartPre=/usr/bin/docker pull krates/master:${KONTENA_VERSION}
+        ExecStartPre=/usr/bin/docker pull quay.io/krates/master
         ExecStart=/usr/bin/docker run --name krates-server-api \
             -e MONGODB_URI=mongodb://krates-server-mongo:27017/krates_server \
             -e VAULT_KEY=${KRATES_VAULT_KEY} -e VAULT_IV=${KRATES_VAULT_IV} \
@@ -77,7 +76,7 @@ coreos:
             <% if initial_admin_code %>-e INITIAL_ADMIN_CODE=<%= initial_admin_code %><% end %> \
             --network krates \
             -p 8080:9292 \
-            krates/master:${KONTENA_VERSION}
+            quay.io/krates/master
         ExecStop=/usr/bin/docker stop krates-server-api
 INIT
 
@@ -106,6 +105,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       vb.auto_nat_dns_proxy = false
       vb.customize ["modifyvm", :id, "--natdnsproxy1", "off" ]
       vb.customize ["modifyvm", :id, "--natdnshostresolver1", "off" ]
+      vb.customize ["modifyvm", :id, "--autostart-enabled", "on" ]
     end
     docker.vm.provision :file, :source => cloud_init_file.path, :destination => "/tmp/vagrantfile-user-data"
     docker.vm.provision :shell, :inline => "mv /tmp/vagrantfile-user-data /var/lib/coreos-vagrant/", :privileged => true
